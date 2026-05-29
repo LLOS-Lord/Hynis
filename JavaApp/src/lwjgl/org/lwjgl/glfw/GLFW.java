@@ -316,17 +316,20 @@ public class GLFW
 
     /** Input options. */
     public static final int
-    GLFW_CURSOR               = 0x33001,
-    GLFW_STICKY_KEYS          = 0x33002,
-    GLFW_STICKY_MOUSE_BUTTONS = 0x33003,
-    GLFW_LOCK_KEY_MODS        = 0x33004,
-    GLFW_RAW_MOUSE_MOTION     = 0x33005;
+    GLFW_CURSOR                  = 0x33001,
+    GLFW_STICKY_KEYS             = 0x33002,
+    GLFW_STICKY_MOUSE_BUTTONS    = 0x33003,
+    GLFW_LOCK_KEY_MODS           = 0x33004,
+    GLFW_RAW_MOUSE_MOTION        = 0x33005,
+    GLFW_UNLIMITED_MOUSE_BUTTONS = 0x33006,
+    GLFW_IME                     = 0x33007;
 
     /** Cursor state. */
     public static final int
     GLFW_CURSOR_NORMAL   = 0x34001,
     GLFW_CURSOR_HIDDEN   = 0x34002,
-    GLFW_CURSOR_DISABLED = 0x34003;
+    GLFW_CURSOR_DISABLED = 0x34003,
+    GLFW_CURSOR_CAPTURED = 0x34004;
 
     /** The regular arrow cursor shape. */
     public static final int GLFW_ARROW_CURSOR = 0x36001;
@@ -1015,6 +1018,11 @@ public class GLFW
 
         win.windowAttribs.put(GLFW_HOVERED, 1);
         win.windowAttribs.put(GLFW_VISIBLE, 1);
+        win.windowAttribs.put(GLFW_RESIZABLE, GLFW_FALSE);
+        win.inputModes.put(GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        win.inputModes.put(GLFW_STICKY_KEYS, GLFW_FALSE);
+        win.inputModes.put(GLFW_STICKY_MOUSE_BUTTONS, GLFW_FALSE);
+        win.inputModes.put(GLFW_IME, GLFW_FALSE);
 
         mGLFWWindowMap.put(ptr, win);
         mainContext = ptr;
@@ -1119,9 +1127,7 @@ public class GLFW
     public static void glfwPostEmptyEvent() {}
 
     public static int glfwGetInputMode(@NativeType("GLFWwindow *") long window, int mode) {
-        // FIXME: Minecraft 26.1+ does not send char from keyboard
-        Integer input = internalGetWindow(window).inputModes.get(mode);
-        return input != null ? input : 0;
+        return internalGetWindow(window).inputModes.get(mode);
     }
 
     public static void glfwSetInputMode(@NativeType("GLFWwindow *") long window, int mode, int value) {
