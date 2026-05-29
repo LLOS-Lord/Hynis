@@ -522,6 +522,7 @@ public class GLFW
     private static native void nativeInitializeGLFWNativeBridge();
     static {
         try {
+            System.load(System.getenv("BUNDLE_PATH") + "/PojavPatch");
             nativeInitializeGLFWNativeBridge();
         } catch (UnsatisfiedLinkError e) {
             e.printStackTrace();
