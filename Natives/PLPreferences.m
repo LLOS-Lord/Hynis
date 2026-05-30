@@ -26,7 +26,7 @@
             @"silence_other_audio": @NO,
             @"silence_with_switch": @NO,
             @"allow_microphone": @NO,
-            @"fix_simple_voicechat_mod": @NO
+            @"fix_simple_voice_chat_mod": @NO
         }.mutableCopy,
         @"control": @{
             @"default_ctrl": @"default.json",
