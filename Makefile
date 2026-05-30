@@ -70,7 +70,7 @@ IOS         := 0
 BOOTJDK     ?= /usr/bin
 $(warning Building on Linux. Note that all targets may not compile or require external components.)
 else
-$(error This platform is not currently supported for building PojavPatch)
+$(error This platform is not currently supported for building Hynis)
 endif
 
 # Define PLATFORM_NAME from PLATFORM
@@ -99,7 +99,7 @@ else
 $(error PLATFORM is not valid.)
 endif
 
-POJAV_BUNDLE_DIR      ?= $(OUTPUTDIR)/PojavPatch.app
+POJAV_BUNDLE_DIR      ?= $(OUTPUTDIR)/Hynis.app
 POJAV_JRE8_DIR        ?= $(SOURCEDIR)/depends/java-8-openjdk
 POJAV_JRE17_DIR       ?= $(SOURCEDIR)/depends/java-17-openjdk
 POJAV_JRE21_DIR       ?= $(SOURCEDIR)/depends/java-21-openjdk
@@ -144,10 +144,10 @@ METHOD_PACKAGE = \
 		IPA_SUFFIX=".ipa"; \
 	fi; \
 	if [ '$(SLIMMED_ONLY)' = '0' ]; then \
-		zip --symlinks -r $(OUTPUTDIR)/com.congcq.pojavpatch-$(VERSION)-$(PLATFORM_NAME)$$IPA_SUFFIX Payload; \
+		zip --symlinks -r $(OUTPUTDIR)/com.congcq.Hynis-$(VERSION)-$(PLATFORM_NAME)$$IPA_SUFFIX Payload; \
 	fi; \
 	if [ '$(SLIMMED)' = '1' ] || [ '$(SLIMMED_ONLY)' = '1' ]; then \
-		zip --symlinks -r $(OUTPUTDIR)/com.congcq.pojavpatch.slimmed-$(VERSION)-$(PLATFORM_NAME)$$IPA_SUFFIX Payload --exclude='Payload/PojavPatch.app/java_runtimes/*'; \
+		zip --symlinks -r $(OUTPUTDIR)/com.congcq.Hynis.slimmed-$(VERSION)-$(PLATFORM_NAME)$$IPA_SUFFIX Payload --exclude='Payload/Hynis.app/java_runtimes/*'; \
 	fi
 
 # Function to download and unpack Java runtimes.
@@ -223,7 +223,7 @@ endif
 all: clean native java jre assets payload package dsym
 
 help:
-	echo 'Makefile to compile Pojav Patch'
+	echo 'Makefile to compile Hynis'
 	echo ''
 	echo 'Usage:'
 	echo '    make                                Makes everything under all'
@@ -233,8 +233,8 @@ help:
 	echo '    make java                           Builds the Java app'
 	echo '    make jre                            Downloads/unpacks the iOS JREs'
 	echo '    make assets                         Compiles Assets.xcassets'
-	echo '    make payload                        Makes Payload/PojavPatch.app'
-	echo '    make package                        Builds ipa of Pojav Patch'
+	echo '    make payload                        Makes Payload/Hynis.app'
+	echo '    make package                        Builds ipa of Hynis'
 	echo '    make deploy                         Copies files to local iDevice'
 	echo '    make dsym                           Generate debug symbol files'
 	echo '    make clean                          Cleans build directories'
@@ -248,7 +248,7 @@ check:
 	)
 
 native:
-	echo '[Pojav Patch v$(VERSION)] native - start'
+	echo '[Hynis v$(VERSION)] native - start'
 	mkdir -p $(WORKINGDIR)
 	cd $(WORKINGDIR) && cmake . \
 		-DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) \
@@ -266,15 +266,15 @@ native:
 	cmake --build $(WORKINGDIR) --config $(CMAKE_BUILD_TYPE) -j$(JOBS)
 	#	--target awt_headless awt_xawt libOSMesaOverride.dylib tinygl4angle PojavLauncher
 	rm $(WORKINGDIR)/libawt_headless.dylib
-	echo '[Pojav Patch v$(VERSION)] native - end'
+	echo '[Hynis v$(VERSION)] native - end'
 
 java:
-	echo '[Pojav Patch v$(VERSION)] java - start'
+	echo '[Hynis v$(VERSION)] java - start'
 	$(MAKE) -C JavaApp -j$(JOBS) BOOTJDK=$(BOOTJDK)
-	echo '[Pojav Patch v$(VERSION)] java - end'
+	echo '[Hynis v$(VERSION)] java - end'
 
 jre: native
-	echo '[Pojav Patch v$(VERSION)] jre - start'
+	echo '[Hynis v$(VERSION)] jre - start'
 	mkdir -p $(SOURCEDIR)/depends
 	cd $(SOURCEDIR)/depends; \
 	$(call METHOD_JAVA_UNPACK,8,'https://crystall1ne.dev/cdn/amethyst-ios/jre8-ios-aarch64.zip'); \
@@ -293,12 +293,12 @@ jre: native
 	cp $(WORKINGDIR)/libawt_xawt.dylib $(OUTPUTDIR)/java_runtimes/java-17-openjdk/lib; \
 	cp $(WORKINGDIR)/libawt_xawt.dylib $(OUTPUTDIR)/java_runtimes/java-21-openjdk/lib; \
 	cp $(WORKINGDIR)/libawt_xawt.dylib $(OUTPUTDIR)/java_runtimes/java-25-openjdk/lib
-	echo '[Pojav Patch v$(VERSION)] jre - end'
+	echo '[Hynis v$(VERSION)] jre - end'
 
 assets:
-	echo '[Pojav Patch v$(VERSION)] assets - start'
+	echo '[Hynis v$(VERSION)] assets - start'
 	if [ '$(IOS)' = '0' ] && [ '$(DETECTPLAT)' = 'Darwin' ]; then \
-		mkdir -p $(WORKINGDIR)/PojavPatch.app/Base.lproj; \
+		mkdir -p $(WORKINGDIR)/Hynis.app/Base.lproj; \
 		xcrun actool $(SOURCEDIR)/Natives/Assets.xcassets \
 			--compile $(SOURCEDIR)/Natives/resources \
 			--platform iphoneos \
@@ -308,71 +308,71 @@ assets:
 			--alternate-app-icon AppIcon-Development \
 			--output-partial-info-plist /dev/null || exit 1; \
 	else \
-		echo 'Due to the required tools not being available, you cannot compile the extras for Pojav Patch with an iOS device.'; \
+		echo 'Due to the required tools not being available, you cannot compile the extras for Hynis with an iOS device.'; \
 	fi
-	echo '[Pojav Patch v$(VERSION)] assets - end'
+	echo '[Hynis v$(VERSION)] assets - end'
 
 payload: native java jre assets
-	echo '[Pojav Patch v$(VERSION)] payload - start'
-	$(call METHOD_DIRCHECK,$(WORKINGDIR)/PojavPatch.app/libs)
-	$(call METHOD_DIRCHECK,$(WORKINGDIR)/PojavPatch.app/libs_caciocavallo)
-	$(call METHOD_DIRCHECK,$(WORKINGDIR)/PojavPatch.app/libs_caciocavallo17)
-	cp -R $(SOURCEDIR)/Natives/resources/en.lproj/LaunchScreen.storyboardc $(WORKINGDIR)/PojavPatch.app/Base.lproj/ || exit 1
-	cp -R $(SOURCEDIR)/Natives/resources/* $(WORKINGDIR)/PojavPatch.app/ || exit 1
-	cp $(WORKINGDIR)/*.dylib $(WORKINGDIR)/PojavPatch.app/Frameworks/ || exit 1
-	cp -R $(SOURCEDIR)/JavaApp/libs/others/* $(WORKINGDIR)/PojavPatch.app/libs/ || exit 1
-	cp $(SOURCEDIR)/JavaApp/build/*.jar $(WORKINGDIR)/PojavPatch.app/libs/ || exit 1
-	cp -R $(SOURCEDIR)/JavaApp/libs/caciocavallo/* $(WORKINGDIR)/PojavPatch.app/libs_caciocavallo || exit 1
-	cp -R $(SOURCEDIR)/JavaApp/libs/caciocavallo17/* $(WORKINGDIR)/PojavPatch.app/libs_caciocavallo17 || exit 1
+	echo '[Hynis v$(VERSION)] payload - start'
+	$(call METHOD_DIRCHECK,$(WORKINGDIR)/Hynis.app/libs)
+	$(call METHOD_DIRCHECK,$(WORKINGDIR)/Hynis.app/libs_caciocavallo)
+	$(call METHOD_DIRCHECK,$(WORKINGDIR)/Hynis.app/libs_caciocavallo17)
+	cp -R $(SOURCEDIR)/Natives/resources/en.lproj/LaunchScreen.storyboardc $(WORKINGDIR)/Hynis.app/Base.lproj/ || exit 1
+	cp -R $(SOURCEDIR)/Natives/resources/* $(WORKINGDIR)/Hynis.app/ || exit 1
+	cp $(WORKINGDIR)/*.dylib $(WORKINGDIR)/Hynis.app/Frameworks/ || exit 1
+	cp -R $(SOURCEDIR)/JavaApp/libs/others/* $(WORKINGDIR)/Hynis.app/libs/ || exit 1
+	cp $(SOURCEDIR)/JavaApp/build/*.jar $(WORKINGDIR)/Hynis.app/libs/ || exit 1
+	cp -R $(SOURCEDIR)/JavaApp/libs/caciocavallo/* $(WORKINGDIR)/Hynis.app/libs_caciocavallo || exit 1
+	cp -R $(SOURCEDIR)/JavaApp/libs/caciocavallo17/* $(WORKINGDIR)/Hynis.app/libs_caciocavallo17 || exit 1
 	$(call METHOD_DIRCHECK,$(OUTPUTDIR)/Payload)
-	cp -R $(WORKINGDIR)/PojavPatch.app $(OUTPUTDIR)/Payload
+	cp -R $(WORKINGDIR)/Hynis.app $(OUTPUTDIR)/Payload
 	if [ '$(SLIMMED_ONLY)' != '1' ]; then \
-		cp -R $(OUTPUTDIR)/java_runtimes $(OUTPUTDIR)/Payload/PojavPatch.app; \
+		cp -R $(OUTPUTDIR)/java_runtimes $(OUTPUTDIR)/Payload/Hynis.app; \
 	fi
-	ldid -S $(OUTPUTDIR)/Payload/PojavPatch.app; \
+	ldid -S $(OUTPUTDIR)/Payload/Hynis.app; \
 	if [ '$(TROLLSTORE_JIT_ENT)' == '1' ]; then \
-		ldid -S$(SOURCEDIR)/entitlements.trollstore.xml $(OUTPUTDIR)/Payload/PojavPatch.app/PojavPatch; \
+		ldid -S$(SOURCEDIR)/entitlements.trollstore.xml $(OUTPUTDIR)/Payload/Hynis.app/Hynis; \
 	else \
-		ldid -S$(SOURCEDIR)/entitlements.sideload.xml $(OUTPUTDIR)/Payload/PojavPatch.app/PojavPatch; \
+		ldid -S$(SOURCEDIR)/entitlements.sideload.xml $(OUTPUTDIR)/Payload/Hynis.app/Hynis; \
 	fi
 	chmod -R 755 $(OUTPUTDIR)/Payload
 	if [ '$(PLATFORM)' != '2' ]; then \
-		$(call METHOD_MACHO,$(OUTPUTDIR)/Payload/PojavPatch.app,$(call METHOD_CHANGE_PLAT,$(PLATFORM),$$file)); \
+		$(call METHOD_MACHO,$(OUTPUTDIR)/Payload/Hynis.app,$(call METHOD_CHANGE_PLAT,$(PLATFORM),$$file)); \
 		$(call METHOD_MACHO,$(OUTPUTDIR)/java_runtimes,$(call METHOD_CHANGE_PLAT,$(PLATFORM),$$file)); \
 	fi
-	echo '[Pojav Patch v$(VERSION)] payload - end'
+	echo '[Hynis v$(VERSION)] payload - end'
 
 deploy:
 	echo '[Pojav v$(VERSION)] deploy - start'
 	cd $(OUTPUTDIR); \
 	if [ '$(IOS)' = '1' ]; then \
-		ldid -S $(WORKINGDIR)/PojavPatch.app || exit 1; \
-		ldid -S$(SOURCEDIR)/entitlements.trollstore.xml $(WORKINGDIR)/PojavPatch.app/PojavPatch || exit 1; \
-		sudo mv $(WORKINGDIR)/*.dylib $(PREFIX)Applications/PojavPatch.app/Frameworks/ || exit 1; \
-		sudo mv $(WORKINGDIR)/PojavPatch.app/PojavPatch $(PREFIX)Applications/PojavPatch.app/PojavPatch || exit 1; \
-		sudo mv $(SOURCEDIR)/JavaApp/build/*.jar $(PREFIX)Applications/PojavPatch.app/libs/ || exit 1; \
-		cd $(PREFIX)Applications/PojavPatch.app/Frameworks || exit 1; \
-		sudo chown -R 501:501 $(PREFIX)Applications/PojavPatch.app/* || exit 1; \
+		ldid -S $(WORKINGDIR)/Hynis.app || exit 1; \
+		ldid -S$(SOURCEDIR)/entitlements.trollstore.xml $(WORKINGDIR)/Hynis.app/Hynis || exit 1; \
+		sudo mv $(WORKINGDIR)/*.dylib $(PREFIX)Applications/Hynis.app/Frameworks/ || exit 1; \
+		sudo mv $(WORKINGDIR)/Hynis.app/Hynis $(PREFIX)Applications/Hynis.app/Hynis || exit 1; \
+		sudo mv $(SOURCEDIR)/JavaApp/build/*.jar $(PREFIX)Applications/Hynis.app/libs/ || exit 1; \
+		cd $(PREFIX)Applications/Hynis.app/Frameworks || exit 1; \
+		sudo chown -R 501:501 $(PREFIX)Applications/Hynis.app/* || exit 1; \
 	elif [ '$(IOS)' = '0' ] && [ '$(DETECTPLAT)' = 'Darwin' ]; then \
 		if [ '$(PLATFORM)' != '2' ] || [ '$(TEAMID)' = '-1' ] || [ '$(SIGNING_TEAMID)' = '-1' ] || [ '$(PROVISIONING)' = '-1' ]; then \
 			echo 'Configuration not supported for deploy recipe.'; \
 		else \
 			$(call METHOD_PACKAGE); \
 			if [ '$(SLIMMED_ONLY)' = '0' ]; then \
-				open $(OUTPUTDIR)/com.congcq.pojavpatch-$(VERSION)-$(PLATFORM_NAME).ipa; \
+				open $(OUTPUTDIR)/com.congcq.Hynis-$(VERSION)-$(PLATFORM_NAME).ipa; \
 			else \
-				open $(OUTPUTDIR)/com.congcq.pojavpatch.slimmed-$(VERSION)-$(PLATFORM_NAME).ipa; \
+				open $(OUTPUTDIR)/com.congcq.Hynis.slimmed-$(VERSION)-$(PLATFORM_NAME).ipa; \
 			fi; \
 		fi; \
 	else \
 		echo 'Device not supported for deploy recipe.'; \
 	fi
-	echo '[Pojav Patch v$(VERSION)] deploy - end'
+	echo '[Hynis v$(VERSION)] deploy - end'
 
 package: payload
-	echo '[Pojav Patch v$(VERSION)] package - start'
+	echo '[Hynis v$(VERSION)] package - start'
 	if [ '$(TEAMID)' != '-1' ] && [ '$(SIGNING_TEAMID)' != '-1' ] && [ -f '$(PROVISIONING)' ] && [ '$(DETECTPLAT)' = 'Darwin' ]; then \
-		printf '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">\n<dict>\n	<key>application-identifier</key>\n	<string>$(TEAMID).com.congcq.pojavpatch</string>\n	<key>com.apple.developer.team-identifier</key>\n	<string>$(TEAMID)</string>\n	<key>get-task-allow</key>\n	<true/>\n	<key>keychain-access-groups</key>\n	<array>\n	<string>$(TEAMID).*</string>\n	<string>com.apple.token</string>\n	</array>\n</dict>\n</plist>' > entitlements.codesign.xml; \
+		printf '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">\n<dict>\n	<key>application-identifier</key>\n	<string>$(TEAMID).com.congcq.Hynis</string>\n	<key>com.apple.developer.team-identifier</key>\n	<string>$(TEAMID)</string>\n	<key>get-task-allow</key>\n	<true/>\n	<key>keychain-access-groups</key>\n	<array>\n	<string>$(TEAMID).*</string>\n	<string>com.apple.token</string>\n	</array>\n</dict>\n</plist>' > entitlements.codesign.xml; \
 		$(MAKE) codesign; \
 		rm -rf entitlements.codesign.xml; \
 	else \
@@ -381,27 +381,27 @@ package: payload
 	cd $(OUTPUTDIR); \
 	$(call METHOD_PACKAGE); \
 	zip --symlinks -r $(OUTPUTDIR)/java_runtimes.zip java_runtimes; \
-	echo '[Pojav Patch v$(VERSION)] package - end'
+	echo '[Hynis v$(VERSION)] package - end'
 	
 dsym: payload
-	echo '[Pojav Patch v$(VERSION)] dsym - start'
-	dsymutil --arch arm64 $(OUTPUTDIR)/Payload/PojavPatch.app/PojavPatch; \
-	rm -rf $(OUTPUTDIR)/PojavPatch.dSYM; \
-	mv $(OUTPUTDIR)/Payload/PojavPatch.app/PojavPatch.dSYM $(OUTPUTDIR)/PojavPatch.dSYM
-	echo '[Pojav Patch v$(VERSION)] dsym - end'
+	echo '[Hynis v$(VERSION)] dsym - start'
+	dsymutil --arch arm64 $(OUTPUTDIR)/Payload/Hynis.app/Hynis; \
+	rm -rf $(OUTPUTDIR)/Hynis.dSYM; \
+	mv $(OUTPUTDIR)/Payload/Hynis.app/Hynis.dSYM $(OUTPUTDIR)/Hynis.dSYM
+	echo '[Hynis v$(VERSION)] dsym - end'
 	
 codesign:
-	echo '[Pojav Patch v$(VERSION)] codesign - start'
-	cp '$(PROVISIONING)' $(OUTPUTDIR)/Payload/PojavPatch.app/embedded.mobileprovision
-	$(call METHOD_MACHO,$(OUTPUTDIR)/Payload/PojavPatch.app,$(call METHOD_CODESIGN,$(SIGNING_TEAMID),$$file))
+	echo '[Hynis v$(VERSION)] codesign - start'
+	cp '$(PROVISIONING)' $(OUTPUTDIR)/Payload/Hynis.app/embedded.mobileprovision
+	$(call METHOD_MACHO,$(OUTPUTDIR)/Payload/Hynis.app,$(call METHOD_CODESIGN,$(SIGNING_TEAMID),$$file))
 	$(call METHOD_MACHO,$(OUTPUTDIR)/java_runtimes,$(call METHOD_CODESIGN,$(SIGNING_TEAMID),$$file))
-	echo '[Pojav Patch v$(VERSION)] codesign - end'
+	echo '[Hynis v$(VERSION)] codesign - end'
 clean:
-	echo '[Pojav Patch v$(VERSION)] clean - start'
+	echo '[Hynis v$(VERSION)] clean - start'
 	rm -rf $(WORKINGDIR)
 	rm -rf JavaApp/build
 	rm -rf $(OUTPUTDIR)
-	echo '[Pojav Patch v$(VERSION)] clean - end'
+	echo '[Hynis v$(VERSION)] clean - end'
 
 		
 

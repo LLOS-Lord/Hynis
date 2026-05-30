@@ -21,7 +21,7 @@ jobs:
 
     runs-on: macos-latest
     steps:
-      - name: Install include tools
+      - name: Install dependencies
         run: brew install temurin@8 ldid make
 
       - name: Remove work folders
@@ -84,51 +84,42 @@ jobs:
           git commit -am "CI: Update gl4es"
           git push
 
-      - name: Build for ${{ matrix.platform_name }}
+      - name: Build
         env:
           password: ${{ secrets.ELLIE_MINI_SECRET }}
         run: |
           export PATH=/opt/procursus/bin:/opt/homebrew/bin:$PATH
           export SLIMMED=1
-          if [ "${{ matrix.platform_name }}" == "ios" ]; then
-            # Build ipa and tipa for iOS
-            gmake -j$(sysctl -n hw.ncpu) dsym package PLATFORM=${{ matrix.platform }}
-            gmake -j$(sysctl -n hw.ncpu) dsym package PLATFORM=${{ matrix.platform }} TROLLSTORE_JIT_ENT=1
-          elif [ "${{ matrix.platform_name }}" == "tvos" ]; then
-            # Build tipa only for tvOS
-            gmake -j$(sysctl -n hw.ncpu) dsym package PLATFORM=${{ matrix.platform }} TROLLSTORE_JIT_ENT=1
-          else
-            # Build ipa only for everything else
-            gmake -j$(sysctl -n hw.ncpu) dsym package PLATFORM=${{ matrix.platform }}
-          fi
+          gmake -j$(sysctl -n hw.ncpu) dsym package PLATFORM=2
+          gmake -j$(sysctl -n hw.ncpu) dsym package PLATFORM=2 TROLLSTORE_JIT_ENT=1
 
       - name: Upload regular ipa
         uses: actions/upload-artifact@main
         with:
-          name: com.congcq.pojavpatch-${{ matrix.platform_name }}.ipa
-          path: artifacts/com.congcq.pojavpatch-*-${{ matrix.platform_name }}.ipa
+          name: com.congcq.Hynis-${{ matrix.platform_name }}.ipa
+          path: artifacts/com.congcq.Hynis-*-${{ matrix.platform_name }}.ipa
 
       - name: Upload regular tipa
         uses: actions/upload-artifact@main
         with:
-          name: com.congcq.pojavpatch-${{ matrix.platform_name }}-trollstore.tipa
-          path: artifacts/com.congcq.pojavpatch-*-${{ matrix.platform_name }}-trollstore.tipa
+          name: com.congcq.Hynis-${{ matrix.platform_name }}-trollstore.tipa
+          path: artifacts/com.congcq.Hynis-*-${{ matrix.platform_name }}-trollstore.tipa
 
       - name: Upload slimmed ipa
         uses: actions/upload-artifact@main
         with:
-          name: com.congcq.pojavpatch.slimmed-${{ matrix.platform_name }}.ipa
-          path: artifacts/com.congcq.pojavpatch.slimmed-*-${{ matrix.platform_name }}.ipa
+          name: com.congcq.Hynis.slimmed-${{ matrix.platform_name }}.ipa
+          path: artifacts/com.congcq.Hynis.slimmed-*-${{ matrix.platform_name }}.ipa
 
       - name: Upload slimmed tipa
         uses: actions/upload-artifact@main
         with:
-          name: com.congcq.pojavpatch.slimmed-${{ matrix.platform_name }}-trollstore.tipa
-          path: artifacts/com.congcq.pojavpatch.slimmed-*-${{ matrix.platform_name }}-trollstore.tipa
+          name: com.congcq.Hynis.slimmed-${{ matrix.platform_name }}-trollstore.tipa
+          path: artifacts/com.congcq.Hynis.slimmed-*-${{ matrix.platform_name }}-trollstore.tipa
 
       - name: Upload PojavLauncher.dSYM
         uses: actions/upload-artifact@main
         if: matrix.platform_name == 'ios'
         with:
-          name: PojavPatch.dSYM
-          path: artifacts/PojavPatch.dSYM
+          name: Hynis.dSYM
+          path: artifacts/Hynis.dSYM

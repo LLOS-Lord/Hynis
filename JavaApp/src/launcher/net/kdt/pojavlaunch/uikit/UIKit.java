@@ -61,7 +61,7 @@ public class UIKit {
     }
 
     static {
-        System.load(System.getenv("BUNDLE_PATH") + "/PojavPatch");
+        System.load(System.getenv("BUNDLE_PATH") + "/Hynis");
     }
 
 

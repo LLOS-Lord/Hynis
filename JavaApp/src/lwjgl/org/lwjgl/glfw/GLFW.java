@@ -522,7 +522,7 @@ public class GLFW
     private static native void nativeInitializeGLFWNativeBridge();
     static {
         try {
-            System.load(System.getenv("BUNDLE_PATH") + "/PojavPatch");
+            System.load(System.getenv("BUNDLE_PATH") + "/Hynis");
             nativeInitializeGLFWNativeBridge();
         } catch (UnsatisfiedLinkError e) {
             e.printStackTrace();
@@ -593,7 +593,7 @@ public class GLFW
         throw new UnsupportedOperationException();
     }
 
-    private static final SharedLibrary GLFW = new MacOSXLibraryDL("PojavPatch", DynamicLinkLoader.RTLD_DEFAULT);
+    private static final SharedLibrary GLFW = new MacOSXLibraryDL("Hynis", DynamicLinkLoader.RTLD_DEFAULT);
 
 
     /** Contains the function pointers loaded from the glfw {@link SharedLibrary}. */

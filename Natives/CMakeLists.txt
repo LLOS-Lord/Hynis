@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.6)
-project(PojavPatch)
+project(Hynis)
 
 configure_file(${CMAKE_CURRENT_LIST_DIR}/config.h.in ${CMAKE_CURRENT_LIST_DIR}/config.h)
 
@@ -92,13 +92,13 @@ target_link_libraries(AFNetworking
 )
 
 # MinecraftAccount JNI
-add_library(PojavPatchAccountJNI SHARED
+add_library(HynisAccountJNI SHARED
   authenticator/MinecraftAccountJNI.m
 )
-target_link_libraries(PojavPatchAccountJNI)
+target_link_libraries(HynisAccountJNI)
 
-# PojavPatch
-add_executable(PojavPatch
+# Hynis
+add_executable(Hynis
   dyld_bypass_validation.m
   dyld_patch_platform.m
   main.m
@@ -182,10 +182,10 @@ add_executable(PojavPatch
 )
 
 if("${CMAKE_HOST_SYSTEM_NAME}" MATCHES "Linux|^GNU$|Android")
-target_sources(PojavPatch PUBLIC non_darwin_utils.m)
+target_sources(Hynis PUBLIC non_darwin_utils.m)
 endif()
 
-target_link_libraries(PojavPatch
+target_link_libraries(Hynis
   PUBLIC AFNetworking
   lzma
   "-F'${CMAKE_CURRENT_LIST_DIR}/build'"
@@ -207,7 +207,7 @@ target_link_libraries(PojavPatch
   "-framework WebKit"
   "-weak_framework SafariServices"
 )
-set_target_properties(PojavPatch PROPERTIES
+set_target_properties(Hynis PROPERTIES
   MACOSX_BUNDLE TRUE
   MACOSX_FRAMEWORK_IDENTIFIER org.cmake.ExecutableTarget
   MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_LIST_DIR}/Info.plist")
