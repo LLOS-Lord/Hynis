@@ -62,6 +62,7 @@
             }.mutableCopy,
             @"java_args": @"",
             @"env_variables": @"",
+            @"lwjgl_version": @"3.3.3",
             @"auto_ram": @(!getEntitlementValue(@"com.apple.private.memorystatus")),
             @"allocated_memory": [NSNumber numberWithFloat:roundf((NSProcessInfo.processInfo.physicalMemory / 1048576) * 0.25)]
         }.mutableCopy,

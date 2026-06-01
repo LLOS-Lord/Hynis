@@ -200,7 +200,14 @@ int launchJVM(NSString *username, id launchTarget, int width, int height, int mi
     }
     margv[++margc] = "-Xms128M";
     margv[++margc] = [NSString stringWithFormat:@"-Xmx%dM", allocmem].UTF8String;
-    margv[++margc] = [NSString stringWithFormat:@"-Djava.library.path=%@/Frameworks", NSBundle.mainBundle.bundlePath].UTF8String;
+
+    NSString *bundlePath = NSBundle.mainBundle.bundlePath;
+    NSString *nativeLibrariesPath = [NSString stringWithFormat:@"%@/Frameworks", bundlePath];
+    // setup lwjgl
+    NSString *lwjglVersion = [PLProfiles resolveKeyForCurrentProfile:@"lwjglVersion"];
+    NSLog(@"[JavaLauncher] lwjgl version is set to %@", lwjglVersion);
+    nativeLibrariesPath = [nativeLibrariesPath stringByAppendingFormat:@":%@/Frameworks/lwjgl/%@", bundlePath, lwjglVersion];
+    margv[++margc] = [NSString stringWithFormat:@"-Djava.library.path=%@", nativeLibrariesPath].UTF8String;
     margv[++margc] = [NSString stringWithFormat:@"-Duser.dir=%@", gameDir].UTF8String;
     margv[++margc] = [NSString stringWithFormat:@"-Duser.home=%s", getenv("POJAV_HOME")].UTF8String;
     margv[++margc] = [NSString stringWithFormat:@"-Duser.timezone=%@", NSTimeZone.localTimeZone.name].UTF8String;
@@ -323,6 +330,8 @@ int launchJVM(NSString *username, id launchTarget, int width, int height, int mi
     NSLog(@"[Init] Found JLI lib");
 
     NSString *classpath = [NSString stringWithFormat:@"%@/*", librariesPath];
+    classpath = [classpath stringByAppendingFormat:@":%@/lwjgl/lwjgl-%@.jar", librariesPath, lwjglVersion];
+
     if (launchJar) {
         classpath = [classpath stringByAppendingFormat:@":%@", launchTarget];
     }

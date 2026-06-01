@@ -15,7 +15,7 @@
 #import "utils.h"
 
 @interface LauncherPreferencesViewController()
-@property(nonatomic) NSArray<NSString*> *rendererKeys, *rendererList;
+@property(nonatomic) NSArray<NSString*> *rendererKeys, *rendererList, *lwjglList;
 @end
 
 @implementation LauncherPreferencesViewController
@@ -48,6 +48,7 @@
 
     self.rendererKeys = getRendererKeys(NO);
     self.rendererList = getRendererNames(NO);
+    self.lwjglList = getLwjglVersions(NO);
     
     BOOL(^whenNotInGame)() = ^BOOL(){
         return self.navigationController != nil;
@@ -354,6 +355,14 @@
                 @"icon": @"terminal",
                 @"type": self.typeTextField,
                 @"enableCondition": whenNotInGame
+            },
+            @{@"key": @"lwjgl_version",
+              @"hasDetail": @YES,
+              @"icon": @"cube",
+              @"type": self.typePickField,
+              @"enableCondition": whenNotInGame,
+              @"pickKeys": self.lwjglList,
+              @"pickList": self.lwjglList
             },
             @{@"key": @"auto_ram",
                 @"hasDetail": @YES,

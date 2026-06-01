@@ -165,3 +165,18 @@ NSArray* getRendererNames(BOOL containsDefault) {
 
     return array;
 }
+
+#pragma mark - Lwjgl
+
+NSArray* getLwjglVersions(BOOL containsDefault) {
+    NSMutableArray *array = @[
+        @"3.3.3",
+        @"3.3.6",
+        @"3.4.1"
+    ].mutableCopy;
+    if (containsDefault) {
+        [array insertObject:@"(default)" atIndex:0];
+    }
+
+    return array;
+}

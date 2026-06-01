@@ -51,7 +51,8 @@ static PLProfiles* current;
         @"defaultTouchCtrl": @"control.default_ctrl",
         @"defaultGamepadCtrl": @"control.default_gamepad_ctrl",
         @"javaArgs": @"java.java_args",
-        @"renderer": @"video.renderer"
+        @"renderer": @"video.renderer",
+        @"lwjglVersion": @"java.lwjgl_version"
     };
     return getPrefObject(prefDefaults[key]);
 }
