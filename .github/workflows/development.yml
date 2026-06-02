@@ -24,8 +24,8 @@ jobs:
         run: |
           export PATH=/opt/procursus/bin:/opt/homebrew/bin:$PATH
           export SLIMMED=1
-          gmake -j2 package
-          gmake -j2 package TROLLSTORE_JIT_ENT=1
+          gmake -j$(sysctl -n hw.ncpu) package
+          gmake -j$(sysctl -n hw.ncpu) package TROLLSTORE_JIT_ENT=1
 
       - name: Upload regular ipa
         uses: actions/upload-artifact@v4
