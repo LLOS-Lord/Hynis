@@ -16,18 +16,11 @@
 	<dict>
 		<key>CFBundleAlternateIcons</key>
 		<dict>
-			<key>AppIcon-Dark</key>
+			<key>Enderman</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>AppIcon-Dark60x60</string>
-				</array>
-			</dict>
-			<key>AppIcon-Development</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>AppIcon-Development60x60</string>
+					<string>Enderman60x60</string>
 				</array>
 			</dict>
 		</dict>
@@ -35,30 +28,22 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>AppIcon-Light60x60</string>
+				<string>Chicken60x60</string>
 			</array>
 			<key>CFBundleIconName</key>
-			<string>AppIcon-Light</string>
+			<string>Chicken</string>
 		</dict>
 	</dict>
 	<key>CFBundleIcons~ipad</key>
 	<dict>
 		<key>CFBundleAlternateIcons</key>
 		<dict>
-			<key>AppIcon-Dark</key>
+			<key>Enderman</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>AppIcon-Dark60x60</string>
-					<string>AppIcon-Dark76x76</string>
-				</array>
-			</dict>
-			<key>AppIcon-Development</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>AppIcon-Development60x60</string>
-					<string>AppIcon-Development76x76</string>
+					<string>Enderman60x60</string>
+					<string>Enderman76x76</string>
 				</array>
 			</dict>
 		</dict>
@@ -66,11 +51,11 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>AppIcon-Light60x60</string>
-				<string>AppIcon-Light76x76</string>
+				<string>Chicken60x60</string>
+				<string>Chicken76x76</string>
 			</array>
 			<key>CFBundleIconName</key>
-			<string>AppIcon-Light</string>
+			<string>Chicken</string>
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>

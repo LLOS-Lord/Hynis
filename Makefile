@@ -263,9 +263,8 @@ assets:
 			--compile $(SOURCEDIR)/Natives/resources \
 			--platform iphoneos \
 			--minimum-deployment-target 14.0 \
-			--app-icon AppIcon-Light \
-			--alternate-app-icon AppIcon-Dark \
-			--alternate-app-icon AppIcon-Development \
+			--app-icon Chicken \
+			--alternate-app-icon Enderman \
 			--output-partial-info-plist /dev/null || exit 1; \
 	else \
 		echo 'Due to the required tools not being available, you cannot compile the extras for Hynis with an iOS device.'; \

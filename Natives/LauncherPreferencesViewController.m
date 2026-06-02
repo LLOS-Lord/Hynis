@@ -86,7 +86,7 @@
                   return UIApplication.sharedApplication.supportsAlternateIcons;
               },
               @"action": ^void(NSString *iconName) {
-                  if ([iconName isEqualToString:@"AppIcon-Light"]) {
+                  if ([iconName isEqualToString:@"Chicken"]) {
                       iconName = nil;
                   }
                   [UIApplication.sharedApplication setAlternateIconName:iconName completionHandler:^(NSError * _Nullable error) {
@@ -96,14 +96,12 @@
                   }];
               },
               @"pickKeys": @[
-                  @"AppIcon-Light",
-                  @"AppIcon-Dark",
-                  @"AppIcon-Development"
+                  @"Chicken",
+                  @"Enderman"
               ],
               @"pickList": @[
                   localize(@"preference.title.appicon-default", nil),
-                  localize(@"preference.title.appicon-dark", nil),
-                  localize(@"preference.title.appicon-development", nil)
+                  localize(@"preference.title.appicon-dark", nil)
               ]
             },
             @{@"key": @"hidden_sidebar",
