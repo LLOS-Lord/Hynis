@@ -53,6 +53,7 @@
     }
     NSArray *rendererKeys = getRendererKeys(YES);
     NSArray *rendererList = getRendererNames(YES);
+    NSArray *lwjglList = getLwjglVersions(YES);
     NSArray *touchControlList = [self listFilesAtPath:[NSString stringWithFormat:@"%s/controlmap", getenv("POJAV_HOME")]];
     NSArray *gamepadControlList = [self listFilesAtPath:[NSString stringWithFormat:@"%s/controlmap/gamepads", getenv("POJAV_HOME")]];
     NSMutableArray *javaList = [getPrefObject(@"java.java_homes") allKeys].mutableCopy;
@@ -137,6 +138,13 @@
               @"type": self.typePickField,
               @"pickKeys": javaList,
               @"pickList": javaList
+            },
+           @{@"key": @"lwjglVersion",
+              @"icon": @"cube",
+              @"title": @"preference.title.lwjgl_version",
+              @"type": self.typePickField,
+              @"pickKeys": lwjglList,
+              @"pickList": lwjglList
             },
             @{@"key": @"javaArgs",
               @"icon": @"slider.vertical.3",
