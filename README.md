@@ -67,7 +67,7 @@ Hynis makes use of **just-in-time compilation**, or JIT, to provide usable speed
 
 ## Contributors
 
-@congcq - Hynis's maintainer  
+@congcq - Hynis's developer  
 @khanhduytran0  
 @crystall1nedev  
 @artdeell  
