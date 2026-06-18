@@ -1,5 +1,4 @@
 #import "SurfaceViewController.h"
-#include "ctxbridges/gl_bridge.h"
 
 #include "jni.h"
 #include <assert.h>
