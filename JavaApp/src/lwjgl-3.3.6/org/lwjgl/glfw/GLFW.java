@@ -901,6 +901,12 @@ public class GLFW
         height.put(mGLFWWindowHeight);
     }
 
+    @Nullable
+    @NativeType("char const *")
+    public static String glfwGetMonitorName(@NativeType("GLFWmonitor *") long monitor) {
+        return String.format(Locale.US, "iOS Display (%dx%d)", mGLFWWindowWidth, mGLFWWindowHeight);
+    }
+
     @NativeType("GLFWmonitor *")
     public static long glfwGetWindowMonitor(@NativeType("GLFWwindow *") long window) {
         return mGLFWWindowMonitor;
