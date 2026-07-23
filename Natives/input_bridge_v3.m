@@ -293,16 +293,16 @@ JNIEXPORT void JNICALL Java_org_lwjgl_glfw_GLFW_nativeInitializeGLFWNativeBridge
     (*env)->DeleteLocalRef(env, localGlfwClass);
 
     method_internalWindowSizeChanged = (*env)->GetStaticMethodID(env, vmGlfwClass, "internalWindowSizeChanged", "(JII)V");
-    if (!method_internalWindowSizeChanged || (*env)->ExceptionOccurred(env)) {
-        if (*env)->ExceptionOccurred(env)) {
+    if (!method_internalWindowSizeChanged || ((*env)->ExceptionOccurred(env))) {
+        if ((*env)->ExceptionOccurred(env)) {
             (*env)->ExceptionClear(env);
         }
         NSLog(@"nativeInitializeGLFWNativeBridge: GetStaticMethodID failed");
     }
 
     jfieldID field_keyDownBuffer = (*env)->GetStaticFieldID(env, vmGlfwClass, "keyDownBuffer", "Ljava/nio/ByteBuffer;");
-    if (!field_keyDownBuffer || (*env)->ExceptionOccurred(env)) {
-        if (*env)->ExceptionOccurred(env)) {
+    if (!field_keyDownBuffer || ((*env)->ExceptionOccurred(env))) {
+        if ((*env)->ExceptionOccurred(env)) {
             (*env)->ExceptionClear(env);
         }
         NSLog(@"nativeInitializeGLFWNativeBridge: GetStaticFieldID failed");
