@@ -523,11 +523,23 @@ public class GLFW
     static {
         try {
             System.load(System.getenv("BUNDLE_PATH") + "/Hynis");
+            // FIX: This now calls the native bridge which initializes GLFW JNI safely.
+            // The native impl is in input_bridge_v3.m: Java_org_lwjgl_glfw_GLFW_nativeInitializeGLFWNativeBridge
             nativeInitializeGLFWNativeBridge();
         } catch (UnsatisfiedLinkError e) {
+            System.err.println("GLFW: nativeInitializeGLFWNativeBridge failed: " + e.getMessage());
             e.printStackTrace();
+        } catch (Throwable t) {
+            System.err.println("GLFW: static initializer error: " + t.getMessage());
+            t.printStackTrace();
         }
-        String[] size = System.getProperty("glfw.windowSize").split("x");
+        // FIX: Guard against null system property
+        String sizeProp = System.getProperty("glfw.windowSize");
+        if (sizeProp == null || sizeProp.isEmpty()) {
+            sizeProp = "1280x720";
+            System.err.println("GLFW: glfw.windowSize not set, using default " + sizeProp);
+        }
+        String[] size = sizeProp.split("x");
         mGLFWWindowWidth = Integer.valueOf(size[0]);
         mGLFWWindowHeight = Integer.valueOf(size[1]);
 

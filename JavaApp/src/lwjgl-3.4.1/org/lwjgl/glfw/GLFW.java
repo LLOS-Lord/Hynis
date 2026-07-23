@@ -525,9 +525,17 @@ public class GLFW
             System.load(System.getenv("BUNDLE_PATH") + "/Hynis");
             nativeInitializeGLFWNativeBridge();
         } catch (UnsatisfiedLinkError e) {
-            e.printStackTrace();
+            System.err.println("GLFW: nativeInitializeGLFWNativeBridge failed (may be handled by JNI_OnLoad): " + e.getMessage());
+        } catch (Throwable t) {
+            System.err.println("GLFW: static initializer error: " + t.getMessage());
+            t.printStackTrace();
         }
-        String[] size = System.getProperty("glfw.windowSize").split("x");
+        String sizeProp = System.getProperty("glfw.windowSize");
+        if (sizeProp == null || sizeProp.isEmpty()) {
+            sizeProp = "1280x720";
+            System.err.println("GLFW: glfw.windowSize not set, using default " + sizeProp);
+        }
+        String[] size = sizeProp.split("x");
         mGLFWWindowWidth = Integer.valueOf(size[0]);
         mGLFWWindowHeight = Integer.valueOf(size[1]);
 
